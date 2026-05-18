@@ -20,7 +20,13 @@ kind: ClusterRole
 metadata:
   name: {{ include "apisix.fullname" . }}
 rules:
+{{- if .Values.apisix.discovery.registry.kubernetes.watch_endpoint_slices }}
+  - apiGroups: ["discovery.k8s.io"]
+    resources: ["endpointslices"]
+    verbs: ["get", "list", "watch"]
+{{- else }}
   - apiGroups: [""]
     resources: ["endpoints"]
     verbs: ["get", "list", "watch"]
+{{- end }}
 {{- end }}
